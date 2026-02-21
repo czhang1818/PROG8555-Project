@@ -13,16 +13,14 @@ erDiagram
     }
 
     VOLUNTEER {
-        uuid volunteer_id PK
-        uuid user_id FK
+        uuid volunteer_id PK, FK "References USER(user_id)"
         string name
         string phone_number
         float total_hours
     }
 
     COORDINATOR {
-        uuid coordinator_id PK
-        uuid user_id FK
+        uuid coordinator_id PK, FK "References USER(user_id)"
         uuid organization_id FK
         string name
         string job_title
@@ -78,7 +76,7 @@ erDiagram
         string minimum_level
     }
 
-    %% One-to-One / Identity Relationships
+    %% One-to-One / Identity Relationships (Shared Primary Key)
     USER ||--|| VOLUNTEER : "has profile"
     USER ||--|| COORDINATOR : "has profile"
 

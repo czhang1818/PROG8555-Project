@@ -20,6 +20,7 @@ namespace VSMS.Web.Models
 
         [Url]
         public string? Website { get; set; }
+
         [Display(Name = "Is Verified")]
         public bool IsVerified { get; set; } = false;
 

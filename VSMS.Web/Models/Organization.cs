@@ -15,11 +15,13 @@ namespace VSMS.Web.Models
 
         [Required]
         [EmailAddress]
+        [Display(Name = "Contact Email")]
         public string ContactEmail { get; set; } = string.Empty;
 
         [Url]
         public string? Website { get; set; }
 
+        [Display(Name = "Is Verified")]
         public bool IsVerified { get; set; } = false;
 
         // Navigation Properties

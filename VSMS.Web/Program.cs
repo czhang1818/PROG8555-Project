@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using VSMS.Web.Data;
+using VSMS.Web.Services;
+using VSMS.Web.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("SqliteConnection")
     ?? throw new InvalidOperationException("Connection string 'SqliteConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<IVolunteerService, VolunteerService>();
 
 var app = builder.Build();
 

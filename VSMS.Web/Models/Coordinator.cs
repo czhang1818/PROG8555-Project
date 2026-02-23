@@ -14,9 +14,11 @@ namespace VSMS.Web.Models
         public string Name { get; set; } = string.Empty;
 
         [Required]
+        [Display(Name = "Job Title")]
         public string JobTitle { get; set; } = string.Empty;
 
         [Phone]
+        [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = string.Empty;
 
         // Navigation Property

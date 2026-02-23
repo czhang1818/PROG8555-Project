@@ -12,12 +12,20 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.3" />
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
+=======
+>>>>>>> b55b1c0 (Update Models)
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.2" />
   </ItemGroup>
   
+=======
+  </ItemGroup>
+
+>>>>>>> b55b1c0 (Update Models)
 </Project>

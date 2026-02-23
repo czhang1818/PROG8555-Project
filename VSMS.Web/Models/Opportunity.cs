@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace VSMS.Web.Models
+{
+    public class Opportunity
+    {
+        [Key]
+        public Guid OpportunityId { get; set; } = Guid.NewGuid();
+
+        [Required]
+        public Guid OrganizationId { get; set; } // Foreign Key
+
+        [Required]
+        [StringLength(200)]
+        public string Title { get; set; } = string.Empty;
+
+        [Required]
+        public DateTime EventDate { get; set; }
+
+        [Required]
+        public string Location { get; set; } = string.Empty;
+
+        [Range(1, 1000)]
+        public int MaxVolunteers { get; set; }
+
+        // Navigation Properties
+        [ForeignKey("OrganizationId")]
+        public Organization? Organization { get; set; }
+        public ICollection<Application>? Applications { get; set; }
+        public ICollection<OpportunitySkill>? OpportunitySkills { get; set; }
+    }
+}

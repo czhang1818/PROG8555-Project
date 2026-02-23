@@ -24,7 +24,9 @@ namespace VSMS.Web.Services
 
         public async Task<Volunteer?> GetVolunteerByIdAsync(Guid id)
         {
-            return await _context.Volunteers.FirstOrDefaultAsync(m => m.UserId == id);
+            return await _context.Volunteers
+                .Include(v => v.VolunteerSkills)
+                .FirstOrDefaultAsync(m => m.UserId == id);
         }
 
         public async Task AddVolunteerAsync(Volunteer volunteer)

@@ -1,4 +1,4 @@
-@model VSMS.Web.Models.Volunteer
+@model VSMS.Web.ViewModels.VolunteerSkillViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,38 +11,60 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Volunteer.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Volunteer.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
+            @Html.DisplayNameFor(model => model.Volunteer.PhoneNumber)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
+            @Html.DisplayFor(model => model.Volunteer.PhoneNumber)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalHours)
+            @Html.DisplayNameFor(model => model.Volunteer.TotalHours)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalHours)
+            @Html.DisplayFor(model => model.Volunteer.TotalHours)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.Volunteer.Email)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.Volunteer.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
+            @Html.DisplayNameFor(model => model.Volunteer.CreatedAt)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
+            @Html.DisplayFor(model => model.Volunteer.CreatedAt)
+        </dd>
+        <dt class="col-sm-2">
+            Skills
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.SelectedSkillIds.Any())
+            {
+                <ul>
+                    @foreach (var skillId in Model.SelectedSkillIds)
+                    {
+                        var skill = Model.AvailableSkills.FirstOrDefault(s => s.SkillId == skillId);
+                        if (skill != null)
+                        {
+                            <li>@skill.Name (@skill.Category)</li>
+                        }
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>None</span>
+            }
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a> 
+    <a asp-action="Edit" asp-route-id="@Model?.Volunteer.UserId">Edit</a> 
     <a asp-action="Index">Back to List</a>
 </div>

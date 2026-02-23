@@ -49,6 +49,29 @@ namespace VSMS.Web.Services
             }
         }
 
+        public async Task AddOrUpdateVolunteerSkillsAsync(Guid volunteerId, List<Guid> skillIds)
+        {
+            var existingSkills = await _context.VolunteerSkills
+                .Where(vs => vs.VolunteerId == volunteerId)
+                .ToListAsync();
+
+            _context.VolunteerSkills.RemoveRange(existingSkills);
+
+            if (skillIds != null && skillIds.Any())
+            {
+                var newSkills = skillIds.Select(skillId => new VolunteerSkill
+                {
+                    VolunteerId = volunteerId,
+                    SkillId = skillId,
+                    AcquiredDate = DateTime.Now,
+                    ProficiencyLevel = "Beginner" // Defaulting to Beginner as the UI doesn't capture this yet
+                });
+                await _context.VolunteerSkills.AddRangeAsync(newSkills);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         public bool VolunteerExists(Guid id)
         {
             return _context.Volunteers.Any(e => e.UserId == id);

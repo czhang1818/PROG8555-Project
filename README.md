@@ -1,11 +1,13 @@
-[TOC]
-
 # PROG8555-Project
 
 **Group Members:**
+
 **Bo Yang**
+
 **Bo Zhang**
+
 **Chunxi Zhang**
+
 **Marieth Franciss**
 
 ## ERD

@@ -45,8 +45,17 @@
                 <span asp-validation-for="Application.OpportunityId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Application.Status" class="control-label"></label>
-                <input name="Status" id="Status" value="@Model.Application.Status" class="form-control" />
+                <label asp-for="Application.Status" class="control-label">Status</label>
+                @{
+                    var statusOptions = new List<SelectListItem>
+                    {
+                        new SelectListItem("Pending", "Pending", Model.Application.Status == "Pending"),
+                        new SelectListItem("Approved", "Approved", Model.Application.Status == "Approved"),
+                        new SelectListItem("Rejected", "Rejected", Model.Application.Status == "Rejected"),
+                        new SelectListItem("Withdrawn", "Withdrawn", Model.Application.Status == "Withdrawn")
+                    };
+                }
+                <select name="Status" id="Status" class="form-control" asp-items="@statusOptions"></select>
                 <span asp-validation-for="Application.Status" class="text-danger"></span>
             </div>
             <div class="form-group mt-3">

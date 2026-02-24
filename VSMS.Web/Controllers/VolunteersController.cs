@@ -14,10 +14,12 @@ namespace VSMS.Web.Controllers
     public class VolunteersController : Controller
     {
         private readonly IVolunteerService _volunteerService;
+        private readonly ISkillService _skillService;
 
-        public VolunteersController(IVolunteerService volunteerService)
+        public VolunteersController(IVolunteerService volunteerService, ISkillService skillService)
         {
             _volunteerService = volunteerService;
+            _skillService = skillService;
         }
 
         // GET: Volunteers
@@ -40,13 +42,29 @@ namespace VSMS.Web.Controllers
                 return NotFound();
             }
 
-            return View(volunteer);
+            // Also load the skills if we want to display them on details
+            var allSkills = await _skillService.GetAllSkillsAsync();
+            var selectedSkillIds = volunteer.VolunteerSkills?.Select(vs => vs.SkillId).ToList() ?? new List<Guid>();
+
+            var viewModel = new VSMS.Web.ViewModels.VolunteerSkillViewModel
+            {
+                Volunteer = volunteer,
+                SelectedSkillIds = selectedSkillIds,
+                AvailableSkills = allSkills.ToList()
+            };
+
+            return View(viewModel);
         }
 
         // GET: Volunteers/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var allSkills = await _skillService.GetAllSkillsAsync();
+            var viewModel = new VSMS.Web.ViewModels.VolunteerSkillViewModel
+            {
+                AvailableSkills = allSkills.ToList()
+            };
+            return View(viewModel);
         }
 
         // POST: Volunteers/Create
@@ -54,21 +72,35 @@ namespace VSMS.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,PhoneNumber,TotalHours,UserId,Email")] Volunteer volunteer)
+        public async Task<IActionResult> Create(VSMS.Web.ViewModels.VolunteerSkillViewModel viewModel)
         {
-            ModelState.Remove("PasswordHash");
-            ModelState.Remove("Role");
+            ModelState.Remove("Volunteer.PasswordHash");
+            ModelState.Remove("Volunteer.Role");
+
+            // Allow empty SelectedSkillIds without failing validation
+            ModelState.Remove("SelectedSkillIds");
+            ModelState.Remove("AvailableSkills");
 
             if (ModelState.IsValid)
             {
+                var volunteer = viewModel.Volunteer;
                 volunteer.UserId = Guid.NewGuid();
                 volunteer.PasswordHash = "DefaultHash!";
                 volunteer.Role = "Volunteer";
                 volunteer.CreatedAt = DateTime.Now;
+
                 await _volunteerService.AddVolunteerAsync(volunteer);
+
+                if (viewModel.SelectedSkillIds != null && viewModel.SelectedSkillIds.Any())
+                {
+                    await _volunteerService.AddOrUpdateVolunteerSkillsAsync(volunteer.UserId, viewModel.SelectedSkillIds);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(volunteer);
+
+            viewModel.AvailableSkills = (await _skillService.GetAllSkillsAsync()).ToList();
+            return View(viewModel);
         }
 
         // GET: Volunteers/Edit/5
@@ -84,7 +116,19 @@ namespace VSMS.Web.Controllers
             {
                 return NotFound();
             }
-            return View(volunteer);
+
+            var allSkills = await _skillService.GetAllSkillsAsync();
+            // Fetch the currently selected skill ids from the junction table
+            var selectedSkillIds = volunteer.VolunteerSkills?.Select(vs => vs.SkillId).ToList() ?? new List<Guid>();
+
+            var viewModel = new VSMS.Web.ViewModels.VolunteerSkillViewModel
+            {
+                Volunteer = volunteer,
+                AvailableSkills = allSkills.ToList(),
+                SelectedSkillIds = selectedSkillIds
+            };
+
+            return View(viewModel);
         }
 
         // POST: Volunteers/Edit/5
@@ -92,15 +136,19 @@ namespace VSMS.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,PhoneNumber,TotalHours,UserId,Email")] Volunteer volunteer)
+        public async Task<IActionResult> Edit(Guid id, VSMS.Web.ViewModels.VolunteerSkillViewModel viewModel)
         {
-            if (id != volunteer.UserId)
+            if (id != viewModel.Volunteer.UserId)
             {
                 return NotFound();
             }
 
-            ModelState.Remove("PasswordHash");
-            ModelState.Remove("Role");
+            ModelState.Remove("Volunteer.PasswordHash");
+            ModelState.Remove("Volunteer.Role");
+
+            // Allow empty SelectedSkillIds without failing validation
+            ModelState.Remove("SelectedSkillIds");
+            ModelState.Remove("AvailableSkills");
 
             if (ModelState.IsValid)
             {
@@ -109,16 +157,19 @@ namespace VSMS.Web.Controllers
                     var existing = await _volunteerService.GetVolunteerByIdAsync(id);
                     if (existing == null) return NotFound();
 
-                    existing.Name = volunteer.Name;
-                    existing.PhoneNumber = volunteer.PhoneNumber;
-                    existing.TotalHours = volunteer.TotalHours;
-                    existing.Email = volunteer.Email;
+                    existing.Name = viewModel.Volunteer.Name;
+                    existing.PhoneNumber = viewModel.Volunteer.PhoneNumber;
+                    existing.TotalHours = viewModel.Volunteer.TotalHours;
+                    existing.Email = viewModel.Volunteer.Email;
 
                     await _volunteerService.UpdateVolunteerAsync(existing);
+
+                    // Update junction table records
+                    await _volunteerService.AddOrUpdateVolunteerSkillsAsync(id, viewModel.SelectedSkillIds ?? new List<Guid>());
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VolunteerExists(volunteer.UserId))
+                    if (!VolunteerExists(viewModel.Volunteer.UserId))
                     {
                         return NotFound();
                     }
@@ -129,7 +180,9 @@ namespace VSMS.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(volunteer);
+
+            viewModel.AvailableSkills = (await _skillService.GetAllSkillsAsync()).ToList();
+            return View(viewModel);
         }
 
         // GET: Volunteers/Delete/5
@@ -146,7 +199,18 @@ namespace VSMS.Web.Controllers
                 return NotFound();
             }
 
-            return View(volunteer);
+            // Also load the skills if we want to display them on details
+            var allSkills = await _skillService.GetAllSkillsAsync();
+            var selectedSkillIds = volunteer.VolunteerSkills?.Select(vs => vs.SkillId).ToList() ?? new List<Guid>();
+
+            var viewModel = new VSMS.Web.ViewModels.VolunteerSkillViewModel
+            {
+                Volunteer = volunteer,
+                SelectedSkillIds = selectedSkillIds,
+                AvailableSkills = allSkills.ToList()
+            };
+
+            return View(viewModel);
         }
 
         // POST: Volunteers/Delete/5

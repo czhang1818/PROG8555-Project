@@ -3,6 +3,107 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to VSMS</h1>
+    <p class="lead">Volunteer Shift Management System</p>
+    <hr />
+    <h4>Group 1</h4>
+    <h5 class="mt-3">Group Members:</h5>
+    <ul class="list-unstyled">
+        <li>Bo Yang</li>
+        <li>Bo Zhang</li>
+        <li>Chunxi Zhang</li>
+        <li>Marieth Franciss</li>
+    </ul>
 </div>
+
+<hr />
+
+<div class="mt-4">
+    <h3 class="text-center mb-4">Entity Relationship Diagram</h3>
+    <div style="width: 100%; overflow-x: auto;">
+        <pre class="mermaid" style="min-width: 1200px;">
+            erDiagram
+            USER {
+            uuid user_id PK
+            string email
+            string password_hash
+            string role
+            datetime created_at
+            }
+
+            VOLUNTEER {
+            uuid volunteer_id FK
+            string name
+            string phone_number
+            float total_hours
+            }
+
+            COORDINATOR {
+            uuid coordinator_id FK
+            uuid organization_id FK
+            string name
+            string job_title
+            string phone_number
+            }
+
+            ORGANIZATION {
+            uuid organization_id PK
+            string name
+            string contact_email
+            string website
+            boolean is_verified
+            }
+
+            OPPORTUNITY {
+            uuid opportunity_id PK
+            uuid organization_id FK
+            string title
+            datetime event_date
+            string location
+            int max_volunteers
+            }
+
+            APPLICATION {
+            uuid app_id PK
+            uuid volunteer_id FK
+            uuid opportunity_id FK
+            datetime submission_date
+            string status
+            }
+
+            SKILL {
+            uuid skill_id PK
+            string name
+            string category
+            string description
+            boolean requires_certification
+            }
+
+            VOLUNTEER_SKILL {
+            uuid volunteer_id FK
+            uuid skill_id FK
+            }
+
+            OPPORTUNITY_SKILL {
+            uuid opportunity_id FK
+            uuid skill_id FK
+            }
+
+            USER ||--|| VOLUNTEER : "has profile"
+            USER ||--|| COORDINATOR : "has profile"
+            ORGANIZATION ||--o{ OPPORTUNITY : "publishes"
+            ORGANIZATION ||--o{ COORDINATOR : "employs"
+            VOLUNTEER ||--o{ APPLICATION : "submits"
+            OPPORTUNITY ||--o{ APPLICATION : "receives"
+            VOLUNTEER ||--o{ VOLUNTEER_SKILL : "has"
+            SKILL ||--o{ VOLUNTEER_SKILL : "belongs to"
+            OPPORTUNITY ||--o{ OPPORTUNITY_SKILL : "requires"
+            SKILL ||--o{ OPPORTUNITY_SKILL : "required by"
+        </pre>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'default', er: { fontSize: 16 } });</script>
+}

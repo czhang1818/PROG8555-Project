@@ -1,14 +1,11 @@
 # PROG8555-Project
 
-**Group Members:**
+## Group Members
 
-**Bo Yang**
-
-**Bo Zhang**
-
-**Chunxi Zhang**
-
-**Marieth Franciss**
+- Bo Yang
+- Bo Zhang
+- Chunxi Zhang
+- Marieth Franciss
 
 ## ERD
 
@@ -104,7 +101,7 @@ erDiagram
     SKILL ||--o{ OPPORTUNITY_SKILL : "is required by"
 ```
 
-## Models 
+## Models
 
 ``` c#
 
@@ -290,8 +287,6 @@ public class OpportunitySkill
 
 ```
 
-
-
 ## DbContext
 
 ``` c#
@@ -355,4 +350,3 @@ public class AppDbContext : DbContext
     }
 }
 ```
-

@@ -78,3 +78,21 @@ $RECYCLE.BIN/
 *.tmp
 *.temp
 *.bak
+
+# .NET / ASP.NET Core
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userprefs
+*.csproj.user
+
+# NuGet
+*.nupkg
+**/packages/
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal

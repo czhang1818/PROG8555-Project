@@ -52,7 +52,8 @@
                         new SelectListItem("Pending", "Pending", Model.Application.Status == "Pending"),
                         new SelectListItem("Approved", "Approved", Model.Application.Status == "Approved"),
                         new SelectListItem("Rejected", "Rejected", Model.Application.Status == "Rejected"),
-                        new SelectListItem("Withdrawn", "Withdrawn", Model.Application.Status == "Withdrawn")
+                        new SelectListItem("Withdrawn", "Withdrawn", Model.Application.Status == "Withdrawn"),
+                        new SelectListItem("Completed", "Completed", Model.Application.Status == "Completed")
                     };
                 }
                 <select name="Status" id="Status" class="form-control" asp-items="@statusOptions"></select>

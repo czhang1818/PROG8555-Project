@@ -1,0 +1,44 @@
+@model VSMS.Web.ViewModels.ApplicationViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Application</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Application.VolunteerId" class="control-label">Volunteer</label>
+                <select name="VolunteerId" id="VolunteerId" class="form-control" asp-items="Model.Volunteers"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Application.OpportunityId" class="control-label">Opportunity</label>
+                <select name="OpportunityId" id="OpportunityId" class="form-control"
+                        asp-items="Model.Opportunities"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Application.Status" class="control-label"></label>
+                <input name="Status" id="Status" class="form-control" value="Pending" />
+                <span asp-validation-for="Application.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

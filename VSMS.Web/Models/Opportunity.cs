@@ -18,7 +18,9 @@ namespace VSMS.Web.Models
         public string Title { get; set; } = string.Empty;
 
         [Required]
-        public DateTime EventDate { get; set; }
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime EventDate { get; set; } = DateTime.Now;
 
         [Required]
         public string Location { get; set; } = string.Empty;

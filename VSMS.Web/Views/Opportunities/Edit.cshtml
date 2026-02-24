@@ -15,7 +15,8 @@
             <input type="hidden" asp-for="Opportunity.OpportunityId" />
             <div class="form-group mb-3">
                 <label asp-for="Opportunity.OrganizationId" class="control-label">Organization</label>
-                <select asp-for="Opportunity.OrganizationId" class="form-control" asp-items="ViewBag.Organizations"></select>
+                <select asp-for="Opportunity.OrganizationId" class="form-control"
+                        asp-items="ViewBag.Organizations"></select>
                 <span asp-validation-for="Opportunity.OrganizationId" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
@@ -25,7 +26,7 @@
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Opportunity.EventDate" class="control-label"></label>
-                <input asp-for="Opportunity.EventDate" class="form-control" />
+                <input asp-for="Opportunity.EventDate" type="datetime-local" step="60" class="form-control" />
                 <span asp-validation-for="Opportunity.EventDate" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
@@ -46,7 +47,8 @@
                     {
                         var isChecked = Model.SelectedSkillIds.Contains(skill.SkillId) ? "checked" : "";
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="SelectedSkillIds" value="@skill.SkillId" id="skill_@skill.SkillId" @isChecked />
+                            <input class="form-check-input" type="checkbox" name="SelectedSkillIds" value="@skill.SkillId"
+                                   id="skill_@skill.SkillId" @isChecked />
                             <label class="form-check-label" for="skill_@skill.SkillId">
                                 @skill.Name (@skill.Category)
                             </label>
@@ -67,5 +69,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

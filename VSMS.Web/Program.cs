@@ -13,6 +13,8 @@ var connectionString = builder.Configuration.GetConnectionString("SqliteConnecti
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
 
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<ISkillService, SkillService>();
+builder.Services.AddScoped<IOpportunityService, OpportunityService>();
 builder.Services.AddScoped<ICoordinatorService, CoordinatorService>();
 builder.Services.AddScoped<IVolunteerService, VolunteerService>();
 

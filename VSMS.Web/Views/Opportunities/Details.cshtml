@@ -1,0 +1,71 @@
+@model VSMS.Web.ViewModels.OpportunitySkillViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Opportunity</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Opportunity.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Opportunity.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Opportunity.EventDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Opportunity.EventDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Opportunity.Location)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Opportunity.Location)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Opportunity.MaxVolunteers)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Opportunity.MaxVolunteers)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Opportunity.Organization)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Opportunity.Organization!.ContactEmail)
+        </dd>
+        
+        <dt class="col-sm-2">
+            Required Skills
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.SelectedSkillIds.Any())
+            {
+                <ul>
+                    @foreach (var skillId in Model.SelectedSkillIds)
+                    {
+                        var skill = Model.AvailableSkills.FirstOrDefault(s => s.SkillId == skillId);
+                        if (skill != null)
+                        {
+                            <li>@skill.Name (@skill.Category)</li>
+                        }
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>None</span>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Opportunity.OpportunityId">Edit</a> 
+    <a asp-action="Index">Back to List</a>
+</div>

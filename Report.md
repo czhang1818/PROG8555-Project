@@ -137,8 +137,9 @@ The project has been fully vertically sliced, all services are registered via De
 
 **Status: Completed**
 
-- **Volunteer Logic**: Created the VolunteerViewModel to ensure that when a Organization is added, the system correctly provides a dropdown for selecting their parent Organization.
-- **Services**: Delivered VolunteerService and CoordinatorService to handle personnel data lifecycle.
+- **Organizations Module**: The CRUD views were created to manage partner organizations.
+- **Volunteer Module**: The CRUD views were created to manage volunteers.   The VolunteerSkillViewModel was created to ensure that when adding a skill, the system displays the skills that must be selected.
+- **Services**: Interfaces were provided for volunteers and organizations. Additionally, VolunteerService and OrganizationService were created to handle personnel data lifecycle.
 
 ### Bo Zhang: Opportunities & Skill Taxonomy
 
